@@ -43,6 +43,16 @@ app.post("/users", (req, res) => {
     .catch(e => res.sendStatus(500));
  });
 
+ app.put("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+ 
+  pool
+    .query('UPDATE users SET first_name=$1 WHERE id=$2;', [name, id])
+    .then(data => res.status(201).json(data))
+    .catch(e => res.sendStatus(500));
+ });
+
 app.get("/orders", (req, res) => {
   pool
     .query("SELECT * FROM orders")
@@ -67,11 +77,13 @@ app.listen("3000", () => console.log("connected"));
 
 
 
-/*# 
-curl commands 
 
-curl -H "Content-Type: application/json" -X DELETE http://localhost:3000/users/3
+// comands for currrll  commands 
+
+//  curl -H "Content-Type: application/json" -X DELETE http://localhost:3000/users/3
 
 
-curl -d '{"name": "Anon"}' -H "Content-Type: application/json" -X POST http://localhost:3000/users
- */
+// curl -d '{"name": "Anon"}' -H "Content-Type: application/json" -X POST http://localhost:3000/users
+
+// curl -d '{"name": "Pikachu"}' -H "Content-Type: application/json" -X PUT http://localhost:3000/users/5
+ 
